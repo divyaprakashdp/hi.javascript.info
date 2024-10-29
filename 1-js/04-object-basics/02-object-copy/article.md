@@ -1,29 +1,29 @@
 # Object references and copying
 
-One of the fundamental differences of objects versus primitives is that objects are stored and copied "by reference", whereas primitive values: strings, numbers, booleans, etc -- are always copied "as a whole value".
+ऑब्जेक्ट्स और प्रिमिटिव्स के बीच एक मूलभूत अंतर यह है कि ऑब्जेक्ट्स को "by reference" संग्रहीत और कॉपी किया जाता है, जबकि प्रिमिटिव वैल्यूज जैसे कि strings, numbers, booleans, आदि हमेशा "as a whole value" के रूप में कॉपी की जाती हैं।
 
-That's easy to understand if we look a bit under the hood of what happens when we copy a value.
+अगर हम यह समझना चाहें कि जब हम किसी वैल्यू को कॉपी करते हैं, तो बैकग्राउंड में क्या होता है, यह समझना आसान है।
 
-Let's start with a primitive, such as a string.
+आइए एक प्रिमिटिव जैसे string से शुरू करते हैं।
 
-Here we put a copy of `message` into `phrase`:
+यहां हमने `message` की एक कॉपी `phrase` में रखी है:
 
 ```js
 let message = "Hello!";
 let phrase = message;
 ```
 
-As a result we have two independent variables, each one storing the string `"Hello!"`.
+परिणामस्वरूप हमारे पास दो स्वतंत्र वेरिएबल्स हैं, जिनमें से हर एक में `"Hello!"` string है।
 
 ![](variable-copy-value.svg)
 
-Quite an obvious result, right?
+यह काफी साफ़ परिणाम है, है ना?
 
-Objects are not like that.
+लेकिन ऑब्जेक्ट्स ऐसे नहीं होते।
 
-**A variable assigned to an object stores not the object itself, but its "address in memory" -- in other words "a reference" to it.**
+**किसी ऑब्जेक्ट को असाइन करने वाला वेरिएबल खुद ऑब्जेक्ट को नहीं, बल्कि "address in memory" को स्टोर करता है -- दूसरे शब्दों में, वह "reference" स्टोर करता है।**
 
-Let's look at an example of such a variable:
+चलो इसका उदाहरण देखते हैं:
 
 ```js
 let user = {
@@ -31,35 +31,35 @@ let user = {
 };
 ```
 
-And here's how it's actually stored in memory:
+और यह मेमोरी में कैसे संग्रहीत होता है:
 
 ![](variable-contains-reference.svg)
 
-The object is stored somewhere in memory (at the right of the picture), while the `user` variable (at the left) has a "reference" to it.
+ऑब्जेक्ट को मेमोरी में कहीं (चित्र के दाहिनी ओर) संग्रहीत किया जाता है, जबकि `user` वेरिएबल (बाईं ओर) में उसका "reference" होता है।
 
-We may think of an object variable, such as `user`, as like a sheet of paper with the address of the object on it.
+हम ऑब्जेक्ट वेरिएबल जैसे `user` को एक पते वाली कागज की शीट के रूप में सोच सकते हैं, जिस पर ऑब्जेक्ट का एड्रेस होता है।
 
-When we perform actions with the object, e.g. take a property `user.name`, the JavaScript engine looks at what's at that address and performs the operation on the actual object.
+जब हम ऑब्जेक्ट पर कोई क्रिया करते हैं, जैसे कि `user.name` को लेते हैं, तो JavaScript इंजन उस एड्रेस को देखता है और असल ऑब्जेक्ट पर वह ऑपरेशन करता है।
 
-Now here's why it's important.
+अब यह महत्वपूर्ण क्यों है, देखते हैं।
 
-**When an object variable is copied, the reference is copied, but the object itself is not duplicated.**
+**जब किसी ऑब्जेक्ट वेरिएबल को कॉपी किया जाता है, तो reference कॉपी होता है, लेकिन ऑब्जेक्ट डुप्लिकेट नहीं होता।**
 
-For instance:
+उदाहरण के लिए:
 
 ```js no-beautify
 let user = { name: "John" };
 
-let admin = user; // copy the reference
+let admin = user; // reference कॉपी किया
 ```
 
-Now we have two variables, each storing a reference to the same object:
+अब हमारे पास दो वेरिएबल्स हैं, जिनमें से हर एक में उसी ऑब्जेक्ट का reference है:
 
 ![](variable-copy-reference.svg)
 
-As you can see, there's still one object, but now with two variables that reference it.
+जैसा कि आप देख सकते हैं, अब भी केवल एक ही ऑब्जेक्ट है, लेकिन अब दो वेरिएबल्स हैं जो उसे reference कर रहे हैं।
 
-We can use either variable to access the object and modify its contents:
+हम किसी भी वेरिएबल का उपयोग करके उस ऑब्जेक्ट को एक्सेस कर सकते हैं और उसकी सामग्री को बदल सकते हैं:
 
 ```js run
 let user = { name: 'John' };
@@ -67,50 +67,48 @@ let user = { name: 'John' };
 let admin = user;
 
 *!*
-admin.name = 'Pete'; // changed by the "admin" reference
+admin.name = 'Pete'; // "admin" reference द्वारा बदला गया
 */!*
 
-alert(*!*user.name*/!*); // 'Pete', changes are seen from the "user" reference
+alert(*!*user.name*/!*); // 'Pete', "user" reference से भी बदलाव दिखेगा
 ```
 
-It's as if we had a cabinet with two keys and used one of them (`admin`) to get into it and make changes. Then, if we later use another key (`user`), we are still opening the same cabinet and can access the changed contents.
+यह ऐसा है जैसे हमारे पास एक अलमारी है जिसमें दो चाबियाँ हैं, और हम एक चाबी (`admin`) का उपयोग करके उसमें बदलाव करते हैं। फिर बाद में, यदि हम दूसरी चाबी (`user`) का उपयोग करते हैं, तो हम वही अलमारी खोल रहे हैं और बदली हुई सामग्री को देख सकते हैं।
 
-## Comparison by reference
+## Reference द्वारा तुलना
 
-Two objects are equal only if they are the same object.
+दो ऑब्जेक्ट्स तभी बराबर होते हैं जब वे एक ही ऑब्जेक्ट हों।
 
-For instance, here `a` and `b` reference the same object, thus they are equal:
+उदाहरण के लिए, यहां `a` और `b` एक ही ऑब्जेक्ट को reference करते हैं, इसलिए वे बराबर हैं:
 
 ```js run
 let a = {};
-let b = a; // copy the reference
+let b = a; // reference कॉपी किया
 
-alert( a == b ); // true, both variables reference the same object
+alert( a == b ); // true, दोनों वेरिएबल्स एक ही ऑब्जेक्ट को reference कर रहे हैं
 alert( a === b ); // true
 ```
 
-And here two independent objects are not equal, even though they look alike (both are empty):
+और यहां दो स्वतंत्र ऑब्जेक्ट्स बराबर नहीं होते, भले ही वे समान दिखते हैं (दोनों खाली हैं):
 
 ```js run
 let a = {};
-let b = {}; // two independent objects
+let b = {}; // दो स्वतंत्र ऑब्जेक्ट्स
 
 alert( a == b ); // false
 ```
 
-For comparisons like `obj1 > obj2` or for a comparison against a primitive `obj == 5`, objects are converted to primitives. We'll study how object conversions work very soon, but to tell the truth, such comparisons are needed very rarely -- usually they appear as a result of a programming mistake.
+`obj1 > obj2` जैसी तुलना या किसी प्रिमिटिव से तुलना के लिए `obj == 5`, ऑब्जेक्ट्स को प्रिमिटिव्स में बदल दिया जाता है। हम जल्दी ही ऑब्जेक्ट कन्वर्ज़न्स पर पढ़ेंगे, लेकिन सच कहें तो इस तरह की तुलनाएँ बहुत कम ही ज़रूरी होती हैं -- आमतौर पर ये प्रोग्रामिंग गलती का परिणाम होती हैं।
 
-## Cloning and merging, Object.assign
+## Cloning और merging, Object.assign
 
-So, copying an object variable creates one more reference to the same object.
+इसलिए, किसी ऑब्जेक्ट वेरिएबल की कॉपी बनाना उस ऑब्जेक्ट का एक और reference बनाता है।
 
-But what if we need to duplicate an object? Create an independent copy, a clone?
+लेकिन अगर हमें एक स्वतंत्र कॉपी, एक clone बनानी हो, तो क्या करें?
 
-That's also doable, but a little bit more difficult, because there's no built-in method for that in JavaScript. But there is rarely a need -- copying by reference is good most of the time.
+यह भी संभव है, लेकिन थोड़ा मुश्किल है, क्योंकि JavaScript में इसके लिए कोई इनबिल्ट विधि नहीं है। हालांकि, इसकी अक्सर ज़रूरत नहीं पड़ती -- reference द्वारा कॉपी करना अधिकांश समय अच्छा होता है।
 
-But if we really want that, then we need to create a new object and replicate the structure of the existing one by iterating over its properties and copying them on the primitive level.
-
-Like this:
+लेकिन अगर हमें सच में ऐसा करना हो, तो हमें एक नया ऑब्जेक्ट बनाना होगा और मौजूदा ऑब्जेक्ट की संरचना को उसकी प्रॉपर्टीज़ पर जाकर कॉपी करना होगा, जैसे इस तरह:
 
 ```js run
 let user = {
@@ -119,34 +117,35 @@ let user = {
 };
 
 *!*
-let clone = {}; // the new empty object
+let clone = {}; // नया खाली ऑब्जेक्ट
 
-// let's copy all user properties into it
+// चलिए user की सभी प्रॉपर्टीज़ इसमें कॉपी करते हैं
 for (let key in user) {
   clone[key] = user[key];
 }
 */!*
 
-// now clone is a fully independent object with the same content
-clone.name = "Pete"; // changed the data in it
+// अब clone पूरी तरह से स्वतंत्र ऑब्जेक्ट है जिसमें वही सामग्री है
+clone.name = "Pete"; // इसके डेटा को बदल दिया
 
-alert( user.name ); // still John in the original object
+alert( user.name ); // अभी भी मूल ऑब्जेक्ट में John है
 ```
 
-Also we can use the method [Object.assign](mdn:js/Object/assign) for that.
+हम इसके लिए [Object.assign](mdn:js/Object/assign) मेथड का उपयोग भी कर सकते हैं।
 
-The syntax is:
+सिंटैक्स है:
 
 ```js
 Object.assign(dest, [src1, src2, src3...])
 ```
 
-- The first argument `dest` is a target object.
-- Further arguments `src1, ..., srcN` (can be as many as needed) are source objects.
-- It copies the properties of all source objects `src1, ..., srcN` into the target `dest`. In other words, properties of all arguments starting from the second are copied into the first object.
-- The call returns `dest`.
+- पहला आर्ग्युमेंट `dest` एक target ऑब्जेक्ट होता है।
+- बाकी आर्ग्युमेंट्स `src1, ..., srcN` (जितने चाहें) source ऑब्जेक्ट्स होते हैं।
+- यह सभी source ऑब्जेक्ट्स `src1, ..., srcN` की प्रॉपर्टीज़ को target `dest` में कॉपी करता है। दूसरे शब्दों में, दूसरे से शुरू होकर सभी आर्ग्युमेंट्स की प्रॉपर्टीज़ पहले ऑब्जेक्ट में कॉपी की जाती हैं।
+- यह कॉल `dest` को रिटर्न करता है।
 
-For instance, we can use it to merge several objects into one:
+उदाहरण के लिए, हम इसका उपयोग करके कई ऑब्जेक्ट्स को एक में मर्ज कर सकते हैं:
+
 ```js
 let user = { name: "John" };
 
@@ -154,24 +153,24 @@ let permissions1 = { canView: true };
 let permissions2 = { canEdit: true };
 
 *!*
-// copies all properties from permissions1 and permissions2 into user
+// सभी प्रॉपर्टीज़ को user में कॉपी करता है
 Object.assign(user, permissions1, permissions2);
 */!*
 
-// now user = { name: "John", canView: true, canEdit: true }
+// अब user = { name: "John", canView: true, canEdit: true }
 ```
 
-If the copied property name already exists, it gets overwritten:
+यदि पहले से मौजूद प्रॉपर्टी नाम है, तो यह ओवरराइट हो जाएगा:
 
 ```js run
 let user = { name: "John" };
 
 Object.assign(user, { name: "Pete" });
 
-alert(user.name); // now user = { name: "Pete" }
+alert(user.name); // अब user = { name: "Pete" }
 ```
 
-We also can use `Object.assign` to replace `for..in` loop for simple cloning:
+हम `Object.assign` का उपयोग simple cloning के लिए भी कर सकते हैं:
 
 ```js
 let user = {
@@ -184,13 +183,14 @@ let clone = Object.assign({}, user);
 */!*
 ```
 
-It copies all properties of `user` into the empty object and returns it.
+यह `user` की सभी प्रॉपर्टीज़ को खाली ऑब्जेक्ट में कॉपी करता है और उसे रिटर्न करता है।
 
 ## Nested cloning
 
-Until now we assumed that all properties of `user` are primitive. But properties can be references to other objects. What to do with them?
+अब तक हमने माना कि `user` की सभी प्रॉपर्टीज़ प्रिमिटिव्स हैं। लेकिन प्रॉपर्टीज़ अन्य ऑब्जेक्ट्स के reference भी हो सकती हैं। तब क्या करें?
 
-Like this:
+जैसे:
+
 ```js run
 let user = {
   name: "John",
@@ -203,9 +203,9 @@ let user = {
 alert( user.sizes.height ); // 182
 ```
 
-Now it's not enough to copy `clone.sizes = user.sizes`, because the `user.sizes` is an object, it will be copied by reference. So `clone` and `user` will share the same sizes:
+अब `clone.sizes = user.sizes` कॉपी करना पर्याप्त नहीं है, क्योंकि `user.sizes` एक ऑब्जेक्ट है, इसे reference द्वारा कॉपी किया जाएगा। इसलिए `clone` और `user` के पास एक ही sizes होगी:
 
-Like this:
+जैसे:
 
 ```js run
 let user = {
@@ -218,21 +218,176 @@ let user = {
 
 let clone = Object.assign({}, user);
 
-alert( user.sizes === clone.sizes ); // true, same object
+alert( user.sizes === clone.sizes ); // true, एक ही ऑब्जेक्ट
 
-// user and clone share sizes
-user.sizes.width++;       // change a property from one place
-alert(clone.sizes.width); // 51, see the result from the other one
+// user और clone sizes शेयर करते हैं
+user.sizes.width++;       // एक जगह से प्रॉपर्टी को बदलते हैं
+alert(clone.sizes.width); // 51, दूसरी जगह से परिणाम देखें
 ```
 
-To fix that, we should use a cloning loop that examines each value of `user[key]` and, if it's an object, then replicate its structure as well. That is called a "deep cloning".
+इसे ठीक
 
-We can use recursion to implement it. Or, to not reinvent the wheel, take an existing implementation, for instance [_.cloneDeep(obj)](https://lodash.com/docs#cloneDeep) from the JavaScript library [lodash](https://lodash.com).
+ करने के लिए, हमें `user.sizes` के भीतर गहराई तक जाकर सब कुछ कॉपी करना होगा। आसान तरीका नहीं है, लेकिन इसके लिए lodash जैसी लाइब्रेरी का उपयोग किया जा सकता है, उदाहरण के लिए `_.cloneDeep(obj)` गहराई तक कॉपी कर देता है।
+
+```
+
+**Comparison by reference**  
+दो ऑब्जेक्ट्स केवल तभी समान होते हैं जब वे एक ही ऑब्जेक्ट हों।
+
+उदाहरण के लिए, यहां `a` और `b` एक ही ऑब्जेक्ट का संदर्भ देते हैं, इसलिए वे समान हैं:
+
+```js run
+let a = {};
+let b = a; // रेफरेंस कॉपी
+
+alert( a == b ); // true, दोनों वेरिएबल एक ही ऑब्जेक्ट को संदर्भित करते हैं
+alert( a === b ); // true
+```
+
+और यहां दो स्वतंत्र ऑब्जेक्ट्स समान नहीं हैं, भले ही वे दिखने में एक जैसे हों (दोनों खाली हैं):
+
+```js run
+let a = {};
+let b = {}; // दो स्वतंत्र ऑब्जेक्ट्स
+
+alert( a == b ); // false
+```
+
+ऐसी तुलना जैसे `obj1 > obj2` या किसी प्रिमिटिव के खिलाफ तुलना `obj == 5`, में ऑब्जेक्ट्स को प्रिमिटिव्स में बदला जाता है। हम जल्द ही अध्ययन करेंगे कि ऑब्जेक्ट कन्वर्ज़न कैसे काम करते हैं, लेकिन सच कहें तो ऐसी तुलना बहुत ही कम आवश्यक होती है -- ये आमतौर पर प्रोग्रामिंग गलती का परिणाम होती हैं।
+
+## Cloning और merging, Object.assign
+
+तो, एक ऑब्जेक्ट वेरिएबल की कॉपी करना एक और रेफरेंस बनाता है उसी ऑब्जेक्ट का।
+
+लेकिन अगर हमें एक ऑब्जेक्ट को डुप्लिकेट करना है? एक स्वतंत्र कॉपी बनाना है, एक क्लोन?
+
+यह भी किया जा सकता है, लेकिन थोड़ा कठिन है, क्योंकि JavaScript में इसके लिए कोई इन-बिल्ट तरीका नहीं है। लेकिन इसकी शायद ही कभी ज़रूरत होती है -- अधिकतर समय रेफरेंस कॉपी करना ही अच्छा होता है।
+
+लेकिन अगर हमें वास्तव में इसकी ज़रूरत है, तो हमें एक नया ऑब्जेक्ट बनाना होगा और मौजूदा एक की संरचना को उसके प्रॉपर्टीज को कॉपी करके प्रिमिटिव स्तर पर डुप्लिकेट करना होगा।
+
+जैसे कि:
+
+```js run
+let user = {
+  name: "John",
+  age: 30
+};
+
+*!*
+let clone = {}; // नया खाली ऑब्जेक्ट
+
+// चलो सभी user प्रॉपर्टीज इसमें कॉपी कर लेते हैं
+for (let key in user) {
+  clone[key] = user[key];
+}
+*/!*
+
+// अब clone एक पूरी तरह स्वतंत्र ऑब्जेक्ट है उसी सामग्री के साथ
+clone.name = "Pete"; // इसमें डाटा बदला
+
+alert( user.name ); // अभी भी original ऑब्जेक्ट में John
+```
+
+हम इस कार्य के लिए [Object.assign](mdn:js/Object/assign) मेथड का भी उपयोग कर सकते हैं।
+
+सिंटैक्स है:
+
+```js
+Object.assign(dest, [src1, src2, src3...])
+```
+
+- पहला तर्क `dest` एक लक्ष्य ऑब्जेक्ट है।
+- आगे के तर्क `src1, ..., srcN` (जितने चाहें उतने हो सकते हैं) स्रोत ऑब्जेक्ट्स हैं।
+- यह सभी स्रोत ऑब्जेक्ट्स `src1, ..., srcN` की प्रॉपर्टीज को लक्ष्य `dest` में कॉपी करता है।
+- कॉल `dest` को लौटाता है।
+
+उदाहरण के लिए, हम इसका उपयोग करके कई ऑब्जेक्ट्स को एक में मिला सकते हैं:
+```js
+let user = { name: "John" };
+
+let permissions1 = { canView: true };
+let permissions2 = { canEdit: true };
+
+*!*
+// सभी प्रॉपर्टीज को permissions1 और permissions2 से user में कॉपी करता है
+Object.assign(user, permissions1, permissions2);
+*/!*
+
+// अब user = { name: "John", canView: true, canEdit: true }
+```
+
+अगर कॉपी की गई प्रॉपर्टी का नाम पहले से मौजूद है, तो वह ओवरराइट हो जाती है:
+
+```js run
+let user = { name: "John" };
+
+Object.assign(user, { name: "Pete" });
+
+alert(user.name); // अब user = { name: "Pete" }
+```
+
+हम `Object.assign` का उपयोग `for..in` लूप को सरल क्लोनिंग के लिए भी कर सकते हैं:
+
+```js
+let user = {
+  name: "John",
+  age: 30
+};
+
+*!*
+let clone = Object.assign({}, user);
+*/!*
+```
+
+यह `user` की सभी प्रॉपर्टीज को खाली ऑब्जेक्ट में कॉपी करता है और उसे लौटाता है।
+
+## Nested cloning
+
+अब तक हमने मान लिया था कि `user` की सभी प्रॉपर्टीज प्रिमिटिव हैं। लेकिन प्रॉपर्टीज अन्य ऑब्जेक्ट्स के रेफरेंस भी हो सकते हैं। उनके साथ क्या करना चाहिए?
+
+जैसे कि:
+```js run
+let user = {
+  name: "John",
+  sizes: {
+    height: 182,
+    width: 50
+  }
+};
+
+alert( user.sizes.height ); // 182
+```
+
+अब केवल `clone.sizes = user.sizes` कॉपी करना पर्याप्त नहीं होगा, क्योंकि `user.sizes` एक ऑब्जेक्ट है, इसे रेफरेंस से कॉपी किया जाएगा। इसलिए `clone` और `user` एक ही साइज को साझा करेंगे:
+
+जैसे कि:
+
+```js run
+let user = {
+  name: "John",
+  sizes: {
+    height: 182,
+    width: 50
+  }
+};
+
+let clone = Object.assign({}, user);
+
+alert( user.sizes === clone.sizes ); // true, एक ही ऑब्जेक्ट
+
+// user और clone साइज साझा करते हैं
+user.sizes.width++;       // किसी एक जगह से प्रॉपर्टी बदले
+alert(clone.sizes.width); // 51, दूसरे जगह से परिणाम देखें
+```
+
+इसे ठीक करने के लिए, हमें एक क्लोनिंग लूप का उपयोग करना चाहिए जो `user[key]` के प्रत्येक मूल्य की जांच करे और, यदि वह एक ऑब्जेक्ट है, तो उसकी संरचना को भी कॉपी करे। इसे "गहन क्लोनिंग" कहा जाता है।
+
+हम इसे लागू करने के लिए रिकर्सन का उपयोग कर सकते हैं। या, पहिया फिर से न बनाने के लिए, किसी मौजूदा कार्यान्वयन का उपयोग कर सकते हैं, उदाहरण के लिए [_.cloneDeep(obj)](https://lodash.com/docs#cloneDeep) JavaScript लाइब्रेरी [lodash](https://lodash.com) से।
 
 ````smart header="Const objects can be modified"
-An important side effect of storing objects as references is that an object declared as `const` *can* be modified.
+रेफरेंस के रूप में ऑब्जेक्ट्स को संग्रहीत करने का एक महत्वपूर्ण प्रभाव यह है कि एक ऑब्जेक्ट को `const` के रूप में घोषित किया जा सकता है *फिर भी इसे संशोधित किया जा सकता है*।
 
-For instance:
+उदाहरण के लिए:
 
 ```js run
 const user = {
@@ -246,17 +401,17 @@ user.name = "Pete"; // (*)
 alert(user.name); // Pete
 ```
 
-It might seem that the line `(*)` would cause an error, but it does not. The value of `user` is constant, it must always reference the same object, but properties of that object are free to change.
+ऐसा लग सकता है कि लाइन `(*)` एक त्रुटि का कारण बनेगी, लेकिन ऐसा नहीं है। `user` का मान स्थिर है, उसे हमेशा उसी ऑब्जेक्ट का संदर्भ होना चाहिए, लेकिन उस ऑब्जेक्ट की प्रॉपर्टीज़ स्वतंत्र रूप से बदल सकती हैं।
 
-In other words, the `const user` gives an error only if we try to set `user=...` as a whole.
+दूसरे शब्दों में, `const user` केवल तभी त्रुटि देता है जब हम `user=...` को संपूर्ण रूप से सेट करने का प्रयास करते हैं।
 
-That said, if we really need to make constant object properties, it's also possible, but using totally different methods. We'll mention that in the chapter <info:property-descriptors>.
+कहा गया, यदि हमें वास्तव में स्थिर ऑब्जेक्ट प्रॉपर्टीज की आवश्यकता है, तो यह भी संभव है, लेकिन इसके लिए पूरी तरह से अलग तरीके उपयोग करने होंगे। हम इसका उल्लेख अध्याय <info:property-descriptors> में करेंगे।
 ````
 
 ## Summary
 
-Objects are assigned and copied by reference. In other words, a variable stores not the "object value", but a "reference" (address in memory) for the value. So copying such a variable or passing it as a function argument copies that reference, not the object itself.
+ऑब्जेक्ट्स रेफरेंस द्वारा असाइन और कॉपी किए जाते हैं। दूसरे शब्दों में, एक वेरिएबल "ऑब्जेक्ट वैल्यू" संग्रहीत नहीं करता, बल्कि उस वैल्यू के लिए एक "रेफरेंस" (मेमोरी में एड्रेस) संग्रहीत करता है। इसलिए ऐसी वेरिएबल को कॉपी करना या उसे एक फ़ंक्शन तर्क के रूप में पास करना उस रेफरेंस को कॉपी करता है, न कि ऑब्जेक्ट को।
 
-All operations via copied references (like adding/removing properties) are performed on the same single object.
+सभी क्रियाएं कॉपी किए गए रेफरेंसेज़ के माध्यम से (जैसे कि प्रॉपर्टीज जोड़ना/निकालना) उसी एकल ऑब्जेक्ट पर की जाती हैं।
 
-To make a "real copy" (a clone) we can use `Object.assign` for the so-called "shallow copy" (nested objects are copied by reference) or a "deep cloning" function, such as [_.cloneDeep(obj)](https://lodash.com/docs#cloneDeep).
+"वास्तविक कॉपी" (एक क्लोन) बनाने के लिए हम `Object.assign` का उपयोग कर सकते हैं जिसे "shallow copy" कहा जाता है (नेस्टेड ऑब्जेक्ट्स रेफरेंस द्वारा कॉपी किए जाते हैं) या "deep cloning" फ़ंक्शन, जैसे कि [_.cloneDeep(obj)](https://lodash.com/docs#cloneDeep)।
